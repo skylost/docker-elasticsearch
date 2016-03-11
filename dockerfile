@@ -19,7 +19,7 @@ RUN wget -q https://download.elasticsearch.org/elasticsearch/release/org/elastic
     mv /opt/elasticsearch-$ELASTICSEARCH_VERSION /opt/elasticsearch
 
 RUN /opt/elasticsearch/bin/plugin install mobz/elasticsearch-head
-RUN /opt/elasticsearch/bin/plugin install mobz/elasticsearch-kopf
+RUN /opt/elasticsearch/bin/plugin install lmenezes/elasticsearch-kopf
 
 
 # Clean apt
