@@ -35,6 +35,9 @@ USER elasticsearch
 RUN mkdir /opt/elasticsearch/logs 
 COPY conf/elasticsearch.yml /opt/elasticsearch/config/elasticsearch.yml
 
+# Add VOLUMEs logs and data
+VOLUME  ["/opt/elasticsearch/data", "/opt/elasticsearch/logs"]
+
 # Expose and Startup
 EXPOSE 9200 9300
 
