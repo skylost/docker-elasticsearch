@@ -26,15 +26,42 @@ node.name: elastic-1
 #
 # node.rack: r1
 #
+# Allow this node to be eligible as a master node (enabled by default):
+#
+node.master: true
+#
+# Allow this node to store data (enabled by default):
+#
+node.data: true
+#
+# By default, multiple nodes are allowed to start from the same installation location
+# to disable it, set the following:
+#
+# node.max_local_storage_nodes: 1
+#
+#
 # ----------------------------------- Paths ------------------------------------
+#
+# Path to directory containing configuration (this file and logging.yml):
+#
+# path.conf: /path/to/conf
 #
 # Path to directory where to store the data (separate multiple locations by comma):
 #
 # path.data: /path/to/data
 #
+# Path to temporary files:
+#
+# path.work: /path/to/work
+#
 # Path to log files:
 #
 # path.logs: /path/to/logs
+#
+# Path to where plugins are installed:
+#
+# path.plugins: /path/to/plugins
+#
 #
 # ----------------------------------- Memory -----------------------------------
 #
@@ -46,6 +73,7 @@ bootstrap.mlockall: true
 # available on the system and that the owner of the process is allowed to use this limit.
 #
 # Elasticsearch performs poorly when the system is swapping the memory.
+#
 #
 # ---------------------------------- Network -----------------------------------
 #
@@ -78,12 +106,78 @@ http.port: 9200
 #
 # ---------------------------------- Gateway -----------------------------------
 #
-# Block initial recovery after a full cluster restart until N nodes are started:
+# The gateway allows for persisting the cluster state between full cluster
+# restarts. Every change to the state (such as adding an index) will be stored
+# in the gateway, and when the cluster starts up for the first time,
+# it will read its state from the gateway.
 #
-# gateway.recover_after_nodes: 3
+# There are several types of gateway implementations. For more information, see
+# <http://elasticsearch.org/guide/en/elasticsearch/reference/current/modules-gateway.html>.
 #
-# For more information, see the documentation at:
-# <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-gateway.html>
+# The default gateway type is the "local" gateway (recommended):
+#
+# gateway.type: local
+#
+# Settings below control how and when to start the initial recovery process on
+# a full cluster restart (to reuse as much local data as possible when using shared
+# gateway).
+#
+# Allow recovery process after N nodes in a cluster are up:
+#
+# gateway.recover_after_nodes: 1
+#
+# Set the timeout to initiate the recovery process, once the N nodes
+# from previous setting are up (accepts time value):
+#
+# gateway.recover_after_time: 10m
+#
+# Set how many nodes are expected in this cluster. Once these N nodes
+# are up (and recover_after_nodes is met), begin recovery process immediately
+# (without waiting for recover_after_time to expire):
+#
+# gateway.expected_nodes: 2
+#
+# Require explicit index creation
+# action.auto_create_index: false
+#
+# Protect against accidental close/delete operations
+# on all indices. You can still close/delete individual
+# indices
+# action.disable_close_all_indices: true
+# action.disable_delete_all_indices: true
+# action.disable_shutdown: true
+#
+#
+# --------------------------------- Slow Log ----------------------------------
+#
+# Shard level query and fetch threshold logging.
+#
+#index.search.slowlog.threshold.query.warn: 10s
+#index.search.slowlog.threshold.query.info: 5s
+#index.search.slowlog.threshold.query.debug: 2s
+#index.search.slowlog.threshold.query.trace: 500ms
+#
+#index.search.slowlog.threshold.fetch.warn: 1s
+#index.search.slowlog.threshold.fetch.info: 800ms
+#index.search.slowlog.threshold.fetch.debug: 500ms
+#index.search.slowlog.threshold.fetch.trace: 200ms
+#
+#index.indexing.slowlog.threshold.index.warn: 10s
+#index.indexing.slowlog.threshold.index.info: 5s
+#index.indexing.slowlog.threshold.index.debug: 2s
+#index.indexing.slowlog.threshold.index.trace: 500ms
+#
+#
+# --------------------------------- GC Logging ----------------------------------
+#
+#monitor.jvm.gc.ParNew.warn: 1000ms
+#monitor.jvm.gc.ParNew.info: 700ms
+#monitor.jvm.gc.ParNew.debug: 400ms
+#
+#monitor.jvm.gc.ConcurrentMarkSweep.warn: 10s
+#monitor.jvm.gc.ConcurrentMarkSweep.info: 5s
+#monitor.jvm.gc.ConcurrentMarkSweep.debug: 2s
+#
 #
 # ---------------------------------- Various -----------------------------------
 #
@@ -94,3 +188,45 @@ http.port: 9200
 # Require explicit names when deleting indices:
 #
 # action.destructive_requires_name: true
+#
+#
+# ---------------------------------- Index --------------------------------------
+#
+# See <http://elasticsearch.org/guide/en/elasticsearch/reference/current/index-modules.html> and
+# <http://elasticsearch.org/guide/en/elasticsearch/reference/current/indices-create-index.html>
+# for more information.
+#
+# Set the number of shards (splits) of an index (5 by default):
+#
+index.number_of_shards: 2
+#
+# Set the number of replicas (additional copies) of an index (1 by default):
+#
+index.number_of_replicas: 1
+#
+#
+# ----------------------------Recovery Throttling -------------------------------
+#
+# These settings allow to control the process of shards allocation between
+# nodes during initial recovery, replica allocation, rebalancing,
+# or when adding and removing nodes.
+#
+# Set the number of concurrent recoveries happening on a node:
+#
+# 1. During the initial recovery
+#
+# cluster.routing.allocation.node_initial_primaries_recoveries: 4
+#
+# 2. During adding/removing nodes, rebalancing, etc
+#
+# cluster.routing.allocation.node_concurrent_recoveries: 2
+#
+# Set to throttle throughput when recovering (eg. 100mb, by default 20mb):
+#
+#indices.recovery.max_bytes_per_sec: 100mb
+#
+# Set to limit the number of open concurrent streams when
+# recovering a shard from a peer:
+#
+# indices.recovery.concurrent_streams: 5
+#
