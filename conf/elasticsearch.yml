@@ -204,6 +204,8 @@ index.number_of_shards: 2
 #
 index.number_of_replicas: 1
 #
+index.refresh_interval:
+#
 #
 # ----------------------------Recovery Throttling -------------------------------
 #
@@ -230,3 +232,8 @@ index.number_of_replicas: 1
 #
 # indices.recovery.concurrent_streams: 5
 #
+# Disable merge throttling entirely
+# indices.store.throttle.type: none
+#
+# Throttle limit (default is 20 MB/s)
+# indices.store.throttle.max_bytes_per_sec: 100mb
