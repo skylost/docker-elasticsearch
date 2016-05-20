@@ -15,7 +15,7 @@
 # Use a descriptive name for your cluster:
 #
 cluster.name: development
-cluster.routing.allocation.awareness.force.zone: z1
+cluster.routing.allocation.awareness.force.zone.values: z1
 cluster.routing.allocation.awareness.attribute: zone
 #
 #
