@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# CONFIG CLUSTER
+if [ -n "$CLUSTER_NAME" ]; then
+  OPTS="$OPTS -Des.cluster.name=$CLUSTER_NAME"
+fi
+
+if [ -n "$CLUSTER_FORCE_ZONE"]; then
+  OPTS="$OPTS -Des.cluster.routing.allocation.awareness.force.zone.values=$CLUSTER_FORCE_ZONE"
+fi
+
+# CONFIG NODE
+if [ -n "$NODE_NAME" ]; then
+  OPTS="$OPTS -Des.node.name=$NODE_NAME"
+fi
+
+if [ -n "$NODE_MASTER" ]; then
+  OPTS="$OPTS -Des.node.master=$NODE_MASTER"
+fi
+
+if [ -n "$NODE_DATA" ]; then
+  OPTS="$OPTS -Des.node.data=$NODE_DATA"
+fi
+
+if [ -n "$NODE_ZONE" ]; then
+  OPTS="$OPTS -Des.node.zone=$NODE_ZONE"
+fi
+
+# CONFIG DISCOVERY
+if [ -n "$UNICAST_HOSTS" ]; then
+  OPTS="$OPTS -Des.discovery.zen.ping.unicast.hosts=$UNICAST_HOSTS"
+fi
+
+# ADD PLUGINS
+if [ -n "$PLUGINS" ]; then
+  for plugin in $(echo $PLUGINS | awk -v RS=, '{print}')
+  do
+    echo "Installing the plugin $plugin"
+    /opt/elasticsearch/bin/plugin install $plugin
+  done
+fi
+
+# Starting Elasticsearch
+
+/opt/elasticsearch/bin/elasticsearch $OPTS

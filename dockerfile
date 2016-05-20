@@ -32,8 +32,11 @@ RUN chown -R elasticsearch:elasticsearch /opt/elasticsearch
 
 USER elasticsearch
 
-RUN mkdir /opt/elasticsearch/logs 
+RUN mkdir /opt/elasticsearch/logs
+RUN mkdir /opt/elasticsearch/data
 COPY conf/elasticsearch.yml /opt/elasticsearch/config/elasticsearch.yml
+
+COPY conf/elasticsearch-entrypoint /
 
 # Add VOLUMEs logs and data
 VOLUME  ["/opt/elasticsearch/data", "/opt/elasticsearch/logs"]
@@ -41,4 +44,4 @@ VOLUME  ["/opt/elasticsearch/data", "/opt/elasticsearch/logs"]
 # Expose and Startup
 EXPOSE 9200 9300
 
-ENTRYPOINT ["/opt/elasticsearch/bin/elasticsearch"]
+ENTRYPOINT ["/elasticsearch-entrypoint"]
