@@ -15,12 +15,15 @@
 # Use a descriptive name for your cluster:
 #
 cluster.name: development
+cluster.routing.allocation.awareness.force.zone: z1
+cluster.routing.allocation.awareness.attribute: zone
+#
 #
 # ------------------------------------ Node ------------------------------------
 #
 # Use a descriptive name for the node:
 #
-node.name: elastic-1
+node.name: elastic
 #
 # Add custom attributes to the node:
 #
@@ -33,6 +36,9 @@ node.master: true
 # Allow this node to store data (enabled by default):
 #
 node.data: true
+#
+# Add custom zone to the node
+node.zone: z1
 #
 # By default, multiple nodes are allowed to start from the same installation location
 # to disable it, set the following:
